@@ -31,7 +31,7 @@ df = dd.read_sql_table(table_name='tb_raw_data', con=url_db,index_col= 'cod', me
 df=client.persist(df)
 def filtra_cod(cod):
     df_codra = client.persist(df[df['cod_ra']==cod])
-    df_codra.to_sql(f"tb_codra_dask_{cod}",url_db, if_exists='append', index=False, compute = True, parallel = True, chunksize=500,dtype={
+    df_codra.to_sql(f"tb_codra_dask_{cod}",url_db, if_exists='replace', index=False, compute = True, parallel = True, chunksize=500,dtype={
             '00AAAJ': types.VARCHAR(6),
              'vlr_doc_seg_emit': oracle.FLOAT(binary_precision=53),
              'vlr_premio_cobra': oracle.FLOAT(binary_precision=53),

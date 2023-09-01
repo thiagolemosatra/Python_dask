@@ -49,7 +49,7 @@ def soma_valores_fevereiro():
     df_result = (df.assign(dat_ult_at=dd.to_datetime(df['dat_ult_at'],format='%Y-%m-%d',errors='coerce'))
                 .query("cod==1 & dat_ult_at.between('2023-02-01','2023-02-28')")
                 .groupby(['cod','dat_ult_at'])['vlr_doc_seg_emit','vlr_premio_cobra','vlr_sinistro_avi','vlr_sinistro_pag'].sum()
-                .to_sql("tb_soma_valores_fevereiro",url_db, if_exists='append', index=True,  compute=True, parallel=True, chunksize=500, dtype={
+                .to_sql("tb_soma_valores_fevereiro",url_db, if_exists='replace', index=True,  compute=True, parallel=True, chunksize=500, dtype={
                          'vlr_doc_seg_emit': oracle.FLOAT(binary_precision=53),
                          'vlr_premio_cobra': oracle.FLOAT(binary_precision=53),
                          'vlr_sinistro_avi': oracle.FLOAT(binary_precision=53),

@@ -47,7 +47,12 @@ def consulta_tab_ref():
     df_merge= dd.merge(df,df_ref, how='left', left_index = True, right_index = True)
     df_merge=(df_merge.fillna({
         'nome_cliente': "Cliente não encontrado"
-    }).to_sql("tb_consulta_ref",url_db, if_exists='append', index=True,  compute=True, parallel=True, chunksize=500))
+    }).to_sql("tb_consulta_ref",url_db, if_exists='replace', index=True,  compute=True, parallel=True, chunksize=500,dtype={
+                         'vlr_doc_seg_emit': oracle.FLOAT(binary_precision=53),
+                         'vlr_premio_cobra': oracle.FLOAT(binary_precision=53),
+                         'vlr_sinistro_avi': oracle.FLOAT(binary_precision=53),
+                         'vlr_sinistro_pag': oracle.FLOAT(binary_precision=53)
+                        }))
 
 print("Iniciando inserção")
 start_time = time.time()
