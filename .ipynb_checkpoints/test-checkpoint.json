@@ -1,0 +1,13 @@
+{
+    "COD": "oracle.NUMBER",
+    "COD_RA": "oracle.NUMBER",
+    "COD_MO": "oracle.NUMBER",
+    "00AAAJ": "types.VARCHAR(6)",
+    "QTD_DOC_SEG_N": "oracle.NUMBER",
+    "QTD_DOC_SEG_R": "oracle.NUMBER",
+    "VLR_DOC_SEG_EMIT": "oracle.FLOAT(binary_precision=53)",
+    "VLR_PREMIO_COBRA": "oracle.FLOAT(binary_precision=53)",
+    "VLR_SINISTRO_AVI": "oracle.FLOAT(binary_precision=53)",
+    "VLR_SINISTRO_PAG": "oracle.FLOAT(binary_precision=53)"
+}
+
