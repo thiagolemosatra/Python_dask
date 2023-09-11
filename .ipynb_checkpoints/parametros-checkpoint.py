@@ -38,8 +38,7 @@ class ParamApdw:
             'Int64':oracle.NUMBER,
             'str':types.VARCHAR(6),
             'datetime64[ns]':oracle.DATE(),
-            'Float64':oracle.FLOAT(binary_precision=53),
-            
+            'Float64':oracle.FLOAT(binary_precision=53)            
         }
 
         
