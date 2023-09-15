@@ -17,7 +17,7 @@ p=par.ParamApdw()
 data=p.arquivo_origem
 url_db = p.url_db
 
-def soma_valores_fevereiro(df,colunas,timestamp_ini):
+def soma_valores_fevereiro(df,colunas,id):
     #Aplica as regras de negocio
     try:
         start_time = time.time()
@@ -33,16 +33,16 @@ def soma_valores_fevereiro(df,colunas,timestamp_ini):
         end_time = time.time()
         elapsed_time = end_time - start_time
         logger.success(f"Inserção concluida,{round(elapsed_time,2)} segs ")
-        utils.update_log_fim(nome_processo='Soma_Valores_Fevereiro',timestamp_ini=timestamp_ini,status='Sucesso')
+        utils.update_log_fim(id,status='Sucesso')
     except Exception as e:
         logger.error(f"Erro na task SomaValoresFevereiro" )
-        utils.update_log_fim(nome_processo='Soma_Valores_Fevereiro',timestamp_ini=timestamp_ini,status='Falha',motivo_erro=f'{e.__class__.__name__}:{e}')
+        utils.update_log_fim(id,status='Falha',motivo_erro=f'{e.__class__.__name__}:{e}')
         sys.exit(45)
 
 
 timestamp_ini=datetime.today()
-utils.insere_log_inicio(nome_processo='Soma_Valores_Fevereiro',timestamp_ini=timestamp_ini)
+id=utils.insere_log_inicio(nome_processo='Soma_Valores_Fevereiro',timestamp_ini=timestamp_ini)
 colunas= ['cod','dat_ult_at','vlr_doc_seg_emit','vlr_premio_cobra','vlr_sinistro_avi','vlr_sinistro_pag']
-df=ro(url_db,timestamp_ini,colunas)
-soma_valores_fevereiro(df,colunas,timestamp_ini)
+df=ro(url_db,id,colunas)
+soma_valores_fevereiro(df,colunas,id)
 

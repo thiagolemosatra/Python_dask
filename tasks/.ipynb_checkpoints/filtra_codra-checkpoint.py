@@ -45,9 +45,9 @@ async def escreve_tabelas():
     res = await asyncio.gather(*tasks)
 
 timestamp_ini=datetime.today()
-utils.insere_log_inicio(nome_processo='Filtra_Cod_Ra',timestamp_ini=timestamp_ini)
-df=ro(url_db,timestamp_ini,meta=p.meta_schema)
+id=utils.insere_log_inicio(nome_processo='Filtra_Cod_Ra', timestamp_ini=timestamp_ini)
+df=ro(url_db,id,meta=p.meta_schema)
 df=client.persist(df)    
 asyncio.get_event_loop().run_until_complete(escreve_tabelas())
-utils.update_log_fim(nome_processo='Filtra_Cod_Ra',timestamp_ini=timestamp_ini,status='Sucesso')
+utils.update_log_fim(id,status='Sucesso')
 

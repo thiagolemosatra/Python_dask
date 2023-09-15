@@ -5,8 +5,6 @@ sys.path.insert(1, '/home/thiago_lemos/poc_dask_app')
 
 import dask.dataframe as dd
 import time
-
-
 import parametros as par
 import utils
 
@@ -27,7 +25,7 @@ data = p.arquivo_origem
 url_db = p.url_db
 
 # Define a função para ler os dados brutos
-def read_raw_data(data, timestamp_ini):
+def read_raw_data(data,id):
     try:
         # Registra uma mensagem informativa no log
         logger.info("Lendo dados")
@@ -44,13 +42,13 @@ def read_raw_data(data, timestamp_ini):
         logger.error(f"Erro na leitura do arquivo: {e}")
         
         # Atualiza o log com informações de falha
-        utils.update_log_fim(nome_processo='Pipeline_Raw', timestamp_ini=timestamp_ini, status='Falha', motivo_erro=f'{e.__class__.__name__}: {e}')
+        utils.update_log_fim(id=id, status='Falha', motivo_erro=f'{e.__class__.__name__}: {e}')
         
         # Encerra o programa
         sys.exit()
 
 # Define a função para realizar o pipeline de dados brutos no Oracle
-def pipeline_raw_oracle(df, timestamp_ini):
+def pipeline_raw_oracle(df,id):
     try:
         start_time = time.time()
         
@@ -75,23 +73,23 @@ def pipeline_raw_oracle(df, timestamp_ini):
         logger.success(f"Inserção concluída, {round(elapsed_time, 2)} segs ")
         
         # Atualiza o log com informações de sucesso
-        utils.update_log_fim(nome_processo='Pipeline_Raw', timestamp_ini=timestamp_ini, status='Sucesso')
+        utils.update_log_fim(id=id, status='Sucesso')
     except Exception as e:
         # Em caso de erro, registra uma mensagem de erro no log
         logger.error("Erro no envio bruto para o Oracle")
         
         # Atualiza o log com informações de falha
-        utils.update_log_fim(nome_processo='Pipeline_Raw', timestamp_ini=timestamp_ini, status='Falha', motivo_erro=f'{e.__class__.__name__}:{e}')
+        utils.update_log_fim(id=id, status='Falha', motivo_erro=f'{e.__class__.__name__}:{e}')
         sys.exit(44)
 
 # Obtém a data e hora atual
 timestamp_ini = datetime.today()
 
 # Registra o início do processo no log
-utils.insere_log_inicio(nome_processo='Pipeline_Raw', timestamp_ini=timestamp_ini)
+id=utils.insere_log_inicio(nome_processo='Pipeline_Raw', timestamp_ini=timestamp_ini)
 
 # Lê os dados brutos
-df = read_raw_data(data, timestamp_ini)
+df = read_raw_data(data, id)
 
 # Realiza o pipeline de dados brutos no Oracle
-pipeline_raw_oracle(df, timestamp_ini)
+pipeline_raw_oracle(df, id)

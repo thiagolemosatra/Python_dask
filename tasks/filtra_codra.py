@@ -23,7 +23,7 @@ p=par.ParamApdw()
 data=p.arquivo_origem
 url_db = p.url_db
 
-def filtra_cod(cod):
+def filtra_cod(cod,id):
     try:
         start_time = time.time()
         logger.info(f"Iniciando inserção tabela {cod}")
@@ -38,16 +38,16 @@ def filtra_cod(cod):
 
     except Exception as e:
         logger.error("Erro na task FiltraCodRa")
-        utils.update_log_fim(nome_processo='Filtra_Cod_Ra',timestamp_ini=timestamp_ini,status='Falha',motivo_erro=f'{e.__class__.__name__}: {e}')
+        utils.update_log_fim(id,status='Falha',motivo_erro=f'{e.__class__.__name__}: {e}')
         sys.exit(42)
 async def escreve_tabelas():
-    tasks = [asyncio.to_thread(filtra_cod, cod) for cod in df.cod_ra.unique()]
+    tasks = [asyncio.to_thread(filtra_cod, cod, id) for cod in df.cod_ra.unique()]
     res = await asyncio.gather(*tasks)
 
 timestamp_ini=datetime.today()
-utils.insere_log_inicio(nome_processo='Filtra_Cod_Ra',timestamp_ini=timestamp_ini)
-df=ro(url_db,timestamp_ini,meta=p.meta_schema)
+id=utils.insere_log_inicio(nome_processo='Filtra_Cod_Ra', timestamp_ini=timestamp_ini)
+df=ro(url_db,id,meta=p.meta_schema)
 df=client.persist(df)    
 asyncio.get_event_loop().run_until_complete(escreve_tabelas())
-utils.update_log_fim(nome_processo='Filtra_Cod_Ra',timestamp_ini=timestamp_ini,status='Sucesso')
+utils.update_log_fim(id,status='Sucesso')
 
