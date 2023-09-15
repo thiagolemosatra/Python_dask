@@ -1,0 +1,8 @@
+2023-09-14 19:33:40.480 | INFO     | utils:read_oracle:41 - Iniciando leitura do Oracle
+2023-09-14 19:33:40.882 | SUCCESS  | utils:read_oracle:57 - Leitura das colunas concluida.
+2023-09-14 19:33:40.883 | INFO     | __main__:soma_valores_fevereiro:24 - Iniciando Processo Soma_Valores_Fevereiro
+2023-09-14 19:33:59.786 | SUCCESS  | __main__:soma_valores_fevereiro:35 - Inserção concluida,18.9 segs 
+2023-09-14 19:34:45.025 | INFO     | utils:read_oracle:41 - Iniciando leitura do Oracle
+2023-09-14 19:34:45.428 | SUCCESS  | utils:read_oracle:57 - Leitura das colunas concluida.
+2023-09-14 19:34:45.429 | INFO     | __main__:soma_valores_fevereiro:24 - Iniciando Processo Soma_Valores_Fevereiro
+2023-09-14 19:35:04.377 | SUCCESS  | __main__:soma_valores_fevereiro:35 - Inserção concluida,18.95 segs 

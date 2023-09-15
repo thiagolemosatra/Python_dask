@@ -4,21 +4,24 @@ sys.path.insert(1,'/home/thiago_lemos/poc_dask_app')
 import dask.dataframe as dd
 import time
 import parametros as par
+import utils
 
 from loguru import logger
 from dask.distributed import Client
 from utils import read_oracle as ro
+from datetime import datetime 
+
 
 client= Client("tcp://10.128.0.48:8786")
 p=par.ParamApdw()
 data=p.arquivo_origem
 url_db = p.url_db
 
-def soma_valores_fevereiro(df,colunas):
+def soma_valores_fevereiro(df,colunas,timestamp_ini):
     #Aplica as regras de negocio
     try:
         start_time = time.time()
-        logger.info("Iniciando Processo SomaValoresFevereiro")
+        logger.info("Iniciando Processo Soma_Valores_Fevereiro")
         df=df.drop_duplicates()
         df_result = (df.assign(dat_ult_at=dd.to_datetime(df['dat_ult_at'],format='%Y-%m-%d',errors='coerce'))
                     .query("cod==1 & dat_ult_at.between('2023-02-01','2023-02-28')")
@@ -30,10 +33,16 @@ def soma_valores_fevereiro(df,colunas):
         end_time = time.time()
         elapsed_time = end_time - start_time
         logger.success(f"Inserção concluida,{round(elapsed_time,2)} segs ")
-    except:
+        utils.update_log_fim(nome_processo='Soma_Valores_Fevereiro',timestamp_ini=timestamp_ini,status='Sucesso')
+    except Exception as e:
         logger.error(f"Erro na task SomaValoresFevereiro" )
+        utils.update_log_fim(nome_processo='Soma_Valores_Fevereiro',timestamp_ini=timestamp_ini,status='Falha',motivo_erro=f'{e.__class__.__name__}:{e}')
+        sys.exit(45)
 
+
+timestamp_ini=datetime.today()
+utils.insere_log_inicio(nome_processo='Soma_Valores_Fevereiro',timestamp_ini=timestamp_ini)
 colunas= ['cod','dat_ult_at','vlr_doc_seg_emit','vlr_premio_cobra','vlr_sinistro_avi','vlr_sinistro_pag']
-df=ro(url_db,colunas)
-soma_valores_fevereiro(df,colunas)
+df=ro(url_db,timestamp_ini,colunas)
+soma_valores_fevereiro(df,colunas,timestamp_ini)
 
